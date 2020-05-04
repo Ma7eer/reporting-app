@@ -1,0 +1,17 @@
+{
+  "name": "defectReportApp",
+  "displayName": "defectReportApp",
+  "expo": {
+    "name": "defectReportApp",
+    "slug": "defectReportApp",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
