@@ -66,16 +66,27 @@ const CameraView = ({ goBackAlert }) => {
 
                 let data = new FormData(photo);
                 // data.append();
+                // form.append(uploadFileName, {
+                //   uri : localImage.full,
+                //   type: 'image/jpeg',
+                //   name: uploadFileName
+                //  })
 
-                let url = "";
+                let url = "http://localhost:8000/";
                 let req = new Request(url, {
                   method: "POST",
                   headers: header,
                   mode: "no-cors",
-                  body: data,
+                  // body: data,
+                  body: JSON.stringify({
+                    firstParam: "yourValue",
+                    secondParam: "yourOtherValue",
+                  }),
                 });
-                let res = await fetch(req);
-                console.log(res);
+                fetch(req)
+                  .then((res) => console.log(res))
+                  .catch((e) => console.log(e));
+                // console.log(res);
               }
             }}
             style={{
