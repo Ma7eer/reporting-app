@@ -11,6 +11,7 @@ import {
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
+import axios from "axios";
 
 const instructions = Platform.select({
   ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
@@ -29,6 +30,26 @@ const FrontPage = ({ createTwoButtonAlert }) => (
 
 const CameraView = ({ goBackAlert }) => {
   const camera = React.useRef(null);
+
+  const createFormData = (photo, body) => {
+    const data = new FormData();
+
+    data.append("photo", {
+      name: "photo.fileName",
+      type: "jpg",
+      uri:
+        Platform.OS === "android"
+          ? photo.uri
+          : photo.uri.replace("file://", ""),
+    });
+
+    Object.keys(body).forEach((key) => {
+      data.append(key, body[key]);
+    });
+
+    return data;
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <Camera
@@ -50,43 +71,31 @@ const CameraView = ({ goBackAlert }) => {
         >
           <TouchableOpacity
             onPress={async () => {
-              if (camera.current) {
-                console.log("snap snap");
-                let photo = await camera.current.takePictureAsync({
-                  // base64: true,
-                });
-                console.log(photo.base64);
-                let location = await Location.getCurrentPositionAsync({});
-                let lat = location.coords.latitude;
-                let long = location.coords.longitude;
+              try {
+                if (camera.current) {
+                  console.log("snap snap");
+                  let photo = await camera.current.takePictureAsync({
+                    // base64: true,
+                  });
+                  // console.log(photo);
 
-                // http request
-                let header = new Headers();
-                header.append("Accept", "application/json");
+                  let location = await Location.getCurrentPositionAsync({});
+                  let lat = location.coords.latitude;
+                  let long = location.coords.longitude;
 
-                let data = new FormData(photo);
-                // data.append();
-                // form.append(uploadFileName, {
-                //   uri : localImage.full,
-                //   type: 'image/jpeg',
-                //   name: uploadFileName
-                //  })
+                  // my network ip address
+                  let url = "http://192.168.68.101:8000";
 
-                let url = "http://localhost:8000/";
-                let req = new Request(url, {
-                  method: "POST",
-                  headers: header,
-                  mode: "no-cors",
-                  // body: data,
-                  body: JSON.stringify({
-                    firstParam: "yourValue",
-                    secondParam: "yourOtherValue",
-                  }),
-                });
-                fetch(req)
-                  .then((res) => console.log(res))
-                  .catch((e) => console.log(e));
-                // console.log(res);
+                  let res = await axios({
+                    url: url,
+                    method: "POST",
+                    data: createFormData(photo, { lat, long }),
+                  });
+                  console.log("data: ", createFormData(photo, { lat, long }));
+                  // console.log(res);
+                }
+              } catch (e) {
+                console.log(e);
               }
             }}
             style={{
