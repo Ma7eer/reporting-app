@@ -1,9 +1,8 @@
 import * as React from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import { Button, Input } from "react-native-elements";
-// import DatePicker from "react-native-date-picker";
 
-const Report = ({ navigation }) => {
+const ReportDetails = ({ navigation }) => {
   return (
     <View
       style={{
@@ -13,12 +12,21 @@ const Report = ({ navigation }) => {
         marginTop: 20,
       }}
     >
+      <Text>Report ID</Text>
+      <Text>Report Name</Text>
+      {/* defect ID */}
+      {/* defect picture */}
+      {/* defect type */}
+      {/* defect location */}
+      {/* defect width */}
+      {/* defect length */}
+      {/* defect thickness */}
+      {/* defect notes */}
       <Input label="Report ID" placeholder="Report ID" disabled={true} />
       <Input label="Report Name" placeholder="Enter Report name" />
       <Input label="Report Date" placeholder="Enter Report date" />
-      {/* <DatePicker date={date} onDateChange={setDate} /> */}
       <Button
-        onPress={() => navigation.navigate("Home")}
+        onPress={() => navigation.navigate("Camera")}
         title="Create New Report"
         touchSoundDisabled={false}
       />
@@ -26,4 +34,4 @@ const Report = ({ navigation }) => {
   );
 };
 
-export default Report;
+export default ReportDetails;

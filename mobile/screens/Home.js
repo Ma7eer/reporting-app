@@ -22,6 +22,7 @@ const users = [
 ];
 
 const Home = ({ navigation }) => {
+  const [reports, setReports] = React.useState(users);
   return (
     <View
       style={{
@@ -39,31 +40,23 @@ const Home = ({ navigation }) => {
         />
       </TouchableOpacity>
 
-      {/* <Card
-        containerStyle={{
-          padding: 0,
-          width: 300,
-        }}
-      > */}
       <View style={{ padding: 0, width: 400, marginTop: 10 }}>
-        {users.map((u, i) => {
+        {reports.map((u, i) => {
           return (
-            <TouchableOpacity>
+            <TouchableOpacity key={i}>
               <ListItem
-                key={i}
                 roundAvatar
                 title={u.name}
                 // avatar={{ uri: u.avatar }}
                 leftAvatar={{ source: { uri: u.avatar } }}
                 bottomDivider
                 containerStyle={{ margin: 6 }}
+                onPress={() => navigation.navigate(`ReportDetails`)}
               />
             </TouchableOpacity>
           );
         })}
       </View>
-
-      {/* </Card> */}
     </View>
   );
 };
