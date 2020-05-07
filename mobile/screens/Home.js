@@ -1,28 +1,18 @@
 import * as React from "react";
 import { View, TouchableOpacity } from "react-native";
-import { Button, Card, ListItem } from "react-native-elements";
+import { Button, ListItem } from "react-native-elements";
 
-const users = [
-  {
-    name: "brynn",
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg",
-  },
-  {
-    name: "brynn",
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg",
-  },
-  {
-    name: "brynn",
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg",
-  },
-  {
-    name: "brynn",
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg",
-  },
-];
+import ReportContext from "../context/ReportContext";
 
 const Home = ({ navigation }) => {
-  const [reports, setReports] = React.useState(users);
+  const getReportList = React.useContext(ReportContext);
+  const [reports, setReports] = React.useState([]);
+
+  React.useEffect(() => {
+    let list = getReportList();
+    setReports(list);
+  }, []);
+
   return (
     <View
       style={{

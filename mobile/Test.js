@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Camera } from "expo-camera";
-import * as Permissions from "expo-permissions";
+// import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
 import axios from "axios";
 
@@ -138,32 +138,32 @@ const CameraView = ({ goBackAlert }) => {
 };
 
 export default function App() {
-  const [hasPermission, setHasPermission] = React.useState(null); // for cam
+  // const [hasPermission, setHasPermission] = React.useState(null); // for cam
   const [camera, setCamera] = React.useState("OFF");
 
-  React.useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
+  // React.useEffect(() => {
+  //   (async () => {
+  //     const { status } = await Camera.requestPermissionsAsync();
+  //     setHasPermission(status === "granted");
+  //   })();
 
-    async function checkMultiPermissions() {
-      const { status, expires, permissions } = await Permissions.getAsync(
-        Permissions.LOCATION,
-        Permissions.CAMERA,
-        Permissions.CAMERA_ROLL
-      );
-      if (status !== "granted") {
-        alert("Hey! You have not enabled selected permissions");
-        await Permissions.askAsync(
-          Permissions.LOCATION,
-          Permissions.CAMERA,
-          Permissions.CAMERA_ROLL
-        );
-      }
-    }
-    checkMultiPermissions();
-  }, []);
+  //   async function checkMultiPermissions() {
+  //     const { status, expires, permissions } = await Permissions.getAsync(
+  //       Permissions.LOCATION,
+  //       Permissions.CAMERA,
+  //       Permissions.CAMERA_ROLL
+  //     );
+  //     if (status !== "granted") {
+  //       alert("Hey! You have not enabled selected permissions");
+  //       await Permissions.askAsync(
+  //         Permissions.LOCATION,
+  //         Permissions.CAMERA,
+  //         Permissions.CAMERA_ROLL
+  //       );
+  //     }
+  //   }
+  //   checkMultiPermissions();
+  // }, []);
 
   const createTwoButtonAlert = () =>
     Alert.alert(
@@ -203,12 +203,12 @@ export default function App() {
       { cancelable: false }
     );
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  // if (hasPermission === null) {
+  //   return <View />;
+  // }
+  // if (hasPermission === false) {
+  //   return <Text>No access to camera</Text>;
+  // }
 
   return (
     <>

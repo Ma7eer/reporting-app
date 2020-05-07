@@ -3,8 +3,10 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import PermissionContext from "./PermissionContext";
-import { askForMultiPermissions } from "./PermissionContext";
+import PermissionContext from "./context/PermissionContext";
+import { askForMultiPermissions } from "./context/PermissionContext";
+import ReportContext from "./context/ReportContext";
+import { getReportList } from "./context/ReportContext";
 
 import Home from "./screens/Home";
 import Report from "./screens/Report";
@@ -47,7 +49,9 @@ const Screens = () => {
 export default function App() {
   return (
     <PermissionContext.Provider value={askForMultiPermissions}>
-      <Screens />
+      <ReportContext.Provider value={getReportList}>
+        <Screens />
+      </ReportContext.Provider>
     </PermissionContext.Provider>
   );
 }
