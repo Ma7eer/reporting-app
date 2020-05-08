@@ -5,13 +5,7 @@ import { Button, ListItem } from "react-native-elements";
 import ReportContext from "../context/ReportContext";
 
 const Home = ({ navigation }) => {
-  const getReportList = React.useContext(ReportContext);
-  const [reports, setReports] = React.useState([]);
-
-  React.useEffect(() => {
-    let list = getReportList();
-    setReports(list);
-  }, []);
+  const { reportList, setReportList } = React.useContext(ReportContext);
 
   return (
     <View
@@ -31,7 +25,7 @@ const Home = ({ navigation }) => {
       </TouchableOpacity>
 
       <View style={{ padding: 0, width: 400, marginTop: 10 }}>
-        {reports.map((u, i) => {
+        {reportList.map((u, i) => {
           return (
             <TouchableOpacity key={i}>
               <ListItem

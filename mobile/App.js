@@ -6,7 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import PermissionContext from "./context/PermissionContext";
 import { askForMultiPermissions } from "./context/PermissionContext";
 import ReportContext from "./context/ReportContext";
-import { getReportList } from "./context/ReportContext";
+import { ReportProvider } from "./context/ReportContext";
 
 import Home from "./screens/Home";
 import Report from "./screens/Report";
@@ -49,9 +49,9 @@ const Screens = () => {
 export default function App() {
   return (
     <PermissionContext.Provider value={askForMultiPermissions}>
-      <ReportContext.Provider value={getReportList}>
+      <ReportProvider>
         <Screens />
-      </ReportContext.Provider>
+      </ReportProvider>
     </PermissionContext.Provider>
   );
 }

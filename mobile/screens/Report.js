@@ -4,6 +4,7 @@ import { Button, Input } from "react-native-elements";
 // import DatePicker from "react-native-date-picker";
 
 const Report = ({ navigation }) => {
+  const [reportName, setReportName] = React.useState("");
   return (
     <View
       style={{
@@ -13,12 +14,30 @@ const Report = ({ navigation }) => {
         marginTop: 20,
       }}
     >
-      <Input label="Report ID" placeholder="Report ID" disabled={true} />
-      <Input label="Report Name" placeholder="Enter Report name" />
-      <Input label="Report Date" placeholder="Enter Report date" />
+      <Input
+        label="Report ID"
+        placeholder="Report ID"
+        disabled={true}
+        // value={() => "1"}
+      />
+      <Input
+        label="Report Name"
+        placeholder="Enter Report name"
+        value={reportName}
+        // onChange={(e) => setReportName(e.target.value)}
+      />
+      <Input
+        label="Report Date"
+        placeholder="Enter Report date"
+        disabled={true}
+        // value={() => Date.now()}
+      />
       {/* <DatePicker date={date} onDateChange={setDate} /> */}
       <Button
-        onPress={() => navigation.navigate("Home")}
+        onPress={() => {
+          console.log(reportName);
+          navigation.navigate("Home");
+        }}
         title="Create New Report"
         touchSoundDisabled={false}
       />
