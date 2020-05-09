@@ -4,9 +4,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import PermissionContext from "./context/PermissionContext";
-import { askForMultiPermissions } from "./context/PermissionContext";
-import ReportContext from "./context/ReportContext";
 import { ReportProvider } from "./context/ReportContext";
+import { ImageProvider } from "./context/ImageContext";
+
+import { askForMultiPermissions } from "./context/PermissionContext";
 
 import Home from "./screens/Home";
 import Report from "./screens/Report";
@@ -39,7 +40,7 @@ const Screens = () => {
         <Stack.Screen
           name="Camera"
           component={Camera}
-          // options={{ title: "Add Report Details" }}
+          options={{ title: "Take Picture of Defect" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -50,7 +51,9 @@ export default function App() {
   return (
     <PermissionContext.Provider value={askForMultiPermissions}>
       <ReportProvider>
-        <Screens />
+        <ImageProvider>
+          <Screens />
+        </ImageProvider>
       </ReportProvider>
     </PermissionContext.Provider>
   );

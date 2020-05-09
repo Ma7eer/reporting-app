@@ -112,7 +112,7 @@ const CameraView = ({ goBackAlert }) => {
           </TouchableOpacity>
         </View>
 
-        <View
+        {/* <View
           style={{
             flex: 1,
             backgroundColor: "transparent",
@@ -131,7 +131,7 @@ const CameraView = ({ goBackAlert }) => {
               Go Back
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </Camera>
     </View>
   );
