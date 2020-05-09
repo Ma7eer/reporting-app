@@ -10,8 +10,10 @@ import { ImageProvider } from "./context/ImageContext";
 import { askForMultiPermissions } from "./context/PermissionContext";
 
 import Home from "./screens/Home";
-import Report from "./screens/Report";
+import Reports from "./screens/Reports";
+import ReportForm from "./screens/Forms/ReportForm";
 import ReportDetails from "./screens/ReportDetails";
+import ReportItems from "./screens/ReportItems";
 import Camera from "./screens/Camera";
 
 const Stack = createStackNavigator();
@@ -28,14 +30,24 @@ const Screens = () => {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen
-          name="Report"
-          component={Report}
-          options={{ title: "Add new Report" }}
+          name="Reports"
+          component={Reports}
+          options={{ title: "Reports" }}
+        />
+        <Stack.Screen
+          name="ReportForm"
+          component={ReportForm}
+          options={{ title: "Add new report" }}
         />
         <Stack.Screen
           name="ReportDetails"
           component={ReportDetails}
           options={{ title: "Add Report Details" }}
+        />
+        <Stack.Screen
+          name="ReportItems"
+          component={ReportItems}
+          options={{ title: "Report items" }}
         />
         <Stack.Screen
           name="Camera"
