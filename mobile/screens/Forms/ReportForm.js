@@ -8,11 +8,15 @@ import ReportContext from "../../context/ReportContext";
 import { generateIndex, generateDate } from "../../util/util";
 
 const ReportForm = ({ route, navigation }) => {
+  /* #region: routing parameter */
   const { page } = route.params;
+
+  /* #region: react context */
   const { setPotholeReportList, setWashoutReportList } = React.useContext(
     ReportContext
   );
 
+  /* #region: react component methods */
   const addNewReport = (prevState, values) => {
     return [
       ...prevState,

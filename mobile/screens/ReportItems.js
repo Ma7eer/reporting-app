@@ -1,11 +1,15 @@
 import * as React from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { Button } from "react-native-elements";
-import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
 
-const ReportItems = ({ navigation }) => {
+import TableElement from "../components/Table";
+
+const ReportItems = ({ route, navigation }) => {
+  const { page, rowData } = route.params;
+
   const tableHeaders = ["ID", "Name"];
-  const tableData = [];
+  const tableData = [["1", "3"]];
+
   return (
     <View style={styles.container}>
       <TouchableOpacity>
@@ -15,21 +19,12 @@ const ReportItems = ({ navigation }) => {
           touchSoundDisabled={false}
         />
       </TouchableOpacity>
-
-      <Table borderStyle={{ borderColor: "transparent" }}>
-        <Row data={tableHeaders} style={styles.head} textStyle={styles.text} />
-        {tableData.map((rowData, index) => (
-          <TableWrapper key={index} style={styles.row}>
-            {rowData.map((cellData, cellIndex) => (
-              <Cell
-                key={cellIndex}
-                data={cellIndex === 3 ? Element(cellData, index) : cellData}
-                textStyle={styles.text}
-              />
-            ))}
-          </TableWrapper>
-        ))}
-      </Table>
+      <TableElement
+        tableHeaders={tableHeaders}
+        tableData={tableData}
+        navigation={navigation}
+        page={page}
+      />
     </View>
   );
 };
