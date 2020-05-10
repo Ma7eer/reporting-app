@@ -3,23 +3,6 @@ import { StyleSheet, ScrollView, View } from "react-native";
 import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
 import { Button } from "react-native-elements";
 
-// const Element = (data, index, rowData, navigation, page) => {
-//   return (
-//     <View style={styles.btnContainer}>
-//       <Button
-//         style={styles.btn}
-//         onPress={() =>
-//           navigation.navigate("ReportItems", {
-//             page,
-//             rowData: rowData,
-//           })
-//         }
-//         title="View"
-//       />
-//     </View>
-//   );
-// };
-
 const TableElement = ({ tableHeaders, tableData, navigation, page }) => (
   <ScrollView style={styles.dataWrapper}>
     <Table borderStyle={{ borderColor: "transparent" }}>
@@ -27,30 +10,32 @@ const TableElement = ({ tableHeaders, tableData, navigation, page }) => (
 
       {tableData.map((rowData, index) => (
         <TableWrapper key={index} style={styles.row}>
-          {rowData.map((cellData, cellIndex) => (
-            <Cell
-              key={cellIndex}
-              data={
-                cellIndex === 3 ? (
-                  <View style={styles.btnContainer}>
-                    <Button
-                      style={styles.btn}
-                      onPress={() =>
-                        navigation.navigate("ReportItems", {
-                          page,
-                          rowData: rowData,
-                        })
-                      }
-                      title="View"
-                    />
-                  </View>
-                ) : (
-                  cellData
-                )
-              }
-              textStyle={styles.text}
-            />
-          ))}
+          {rowData.map((cellData, cellIndex) => {
+            return (
+              <Cell
+                key={cellIndex}
+                data={
+                  cellIndex === rowData.length - 1 ? (
+                    <View style={styles.btnContainer}>
+                      <Button
+                        style={styles.btn}
+                        onPress={() =>
+                          navigation.navigate("ReportItems", {
+                            page,
+                            rowData: rowData,
+                          })
+                        }
+                        title="View"
+                      />
+                    </View>
+                  ) : (
+                    cellData
+                  )
+                }
+                textStyle={styles.text}
+              />
+            );
+          })}
         </TableWrapper>
       ))}
     </Table>

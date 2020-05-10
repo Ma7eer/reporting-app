@@ -12,8 +12,8 @@ import { askForMultiPermissions } from "./context/PermissionContext";
 import Home from "./screens/Home";
 import Reports from "./screens/Reports";
 import ReportForm from "./screens/Forms/ReportForm";
-import ReportDetails from "./screens/ReportDetails";
 import ReportItems from "./screens/ReportItems";
+import ReportItemForm from "./screens/Forms/ReportItemForm";
 import Camera from "./screens/Camera";
 
 const Stack = createStackNavigator();
@@ -40,14 +40,14 @@ const Screens = () => {
           options={{ title: "Add new report" }}
         />
         <Stack.Screen
-          name="ReportDetails"
-          component={ReportDetails}
-          options={{ title: "Add Report Details" }}
-        />
-        <Stack.Screen
           name="ReportItems"
           component={ReportItems}
           options={{ title: "Report items" }}
+        />
+        <Stack.Screen
+          name="ReportItemForm"
+          component={ReportItemForm}
+          options={{ title: "Add new report item" }}
         />
         <Stack.Screen
           name="Camera"

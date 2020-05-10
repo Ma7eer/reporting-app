@@ -7,14 +7,16 @@ import TableElement from "../components/Table";
 const ReportItems = ({ route, navigation }) => {
   const { page, rowData } = route.params;
 
-  const tableHeaders = ["ID", "Name"];
-  const tableData = [["1", "3"]];
+  const tableHeaders = ["ID", "Type", "Notes", "coordinates", "Action"];
+  const tableData = [
+    ["1", "pothole", "many cracks", "24.0000, 11.0000", "Action"],
+  ];
 
   return (
     <View style={styles.container}>
       <TouchableOpacity>
         <Button
-          onPress={() => navigation.navigate("ReportForm", { page })}
+          onPress={() => navigation.navigate("ReportItemForm", { page })}
           title="Add New Report item"
           touchSoundDisabled={false}
         />
