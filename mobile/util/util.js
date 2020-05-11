@@ -1,8 +1,6 @@
-export const generateIndex = (page) => {
+export const generateIndex = () => {
   let d = new Date();
-  return page === "pothole"
-    ? `P${d.getFullYear()}-${Math.floor(Math.random() * 9999) + 1000}`
-    : `W${d.getFullYear()}-${Math.floor(Math.random() * 9999) + 1000}`;
+  return `R${d.getFullYear()}-${Math.floor(Math.random() * 9999) + 1000}`;
 };
 
 export const generateDate = () => {

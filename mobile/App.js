@@ -10,9 +10,9 @@ import { ImageProvider } from "./context/ImageContext";
 import { askForMultiPermissions } from "./context/PermissionContext";
 
 import Home from "./screens/Home";
-import Reports from "./screens/Reports";
-import ReportForm from "./screens/Forms/ReportForm";
-import ReportItems from "./screens/ReportItems";
+import ReportsList from "./screens/ReportsList";
+import ReportForm from "./screens/ReportsForm";
+import DefectsList from "./screens/DefectsList";
 import ReportItemForm from "./screens/Forms/ReportItemForm";
 import Camera from "./screens/Camera";
 
@@ -30,9 +30,9 @@ const Screens = () => {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen
-          name="Reports"
-          component={Reports}
-          options={{ title: "Reports" }}
+          name="ReportsList"
+          component={ReportsList}
+          options={{ title: "All Reports" }}
         />
         <Stack.Screen
           name="ReportForm"
@@ -40,9 +40,9 @@ const Screens = () => {
           options={{ title: "Add new report" }}
         />
         <Stack.Screen
-          name="ReportItems"
-          component={ReportItems}
-          options={{ title: "Report items" }}
+          name="DefectsList"
+          component={DefectsList}
+          options={{ title: "All defects" }}
         />
         <Stack.Screen
           name="ReportItemForm"

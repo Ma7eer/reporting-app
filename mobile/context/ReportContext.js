@@ -4,7 +4,7 @@ const ReportContext = React.createContext();
 
 let date = new Date();
 
-let potholeList = [
+let list = [
   [
     "R2019-001",
     "Fahud to Mattan",
@@ -25,27 +25,15 @@ let potholeList = [
   ],
 ];
 
-let washoutList = [
-  [
-    "R2020-001",
-    "Fahud to MGate 2",
-    `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`,
-    "Action",
-  ],
-];
-
 export const ReportProvider = ({ children }) => {
   /* This allows us to change context from our tag component */
-  const [potholeReportList, setPotholeReportList] = React.useState(potholeList);
-  const [washoutReportList, setWashoutReportList] = React.useState(washoutList);
+  const [reportList, setReportList] = React.useState(list);
 
   return (
     <ReportContext.Provider
       value={{
-        potholeReportList,
-        setPotholeReportList,
-        washoutReportList,
-        setWashoutReportList,
+        reportList,
+        setReportList,
       }}
     >
       {children}
