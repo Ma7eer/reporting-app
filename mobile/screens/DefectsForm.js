@@ -5,11 +5,11 @@ import { Formik } from "formik";
 
 import ImageContext from "../../context/ImageContext";
 
-import { generateIndex, generateDate } from "../../util/util";
+import { generateIndex, generateDate } from "../util/util";
 
 const ReportItemForm = ({ route, navigation }) => {
   /* #region: routing parameter */
-  const { page } = route.params;
+  // const { page } = route.params;
 
   const { imageUrl, setImageUrl } = React.useContext(ImageContext);
 
@@ -24,7 +24,7 @@ const ReportItemForm = ({ route, navigation }) => {
     >
       <Formik
         initialValues={{
-          defectId: generateIndex(page),
+          defectId: generateIndex(),
           defectType: "",
           lat: "",
           long: "",
@@ -34,15 +34,15 @@ const ReportItemForm = ({ route, navigation }) => {
           notes: "",
         }}
         onSubmit={async (values) => {
-          if (page === "pothole") {
-            await setPotholeReportList((prevState) =>
-              addNewReport(prevState, values)
-            );
-          } else if (page === "washout") {
-            await setWashoutReportList((prevState) =>
-              addNewReport(prevState, values)
-            );
-          }
+          // if (page === "pothole") {
+          //   await setPotholeReportList((prevState) =>
+          //     addNewReport(prevState, values)
+          //   );
+          // } else if (page === "washout") {
+          //   await setWashoutReportList((prevState) =>
+          //     addNewReport(prevState, values)
+          //   );
+          // }
           navigation.navigate("Reports");
         }}
       >

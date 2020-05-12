@@ -12,8 +12,9 @@ import { askForMultiPermissions } from "./context/PermissionContext";
 import Home from "./screens/Home";
 import ReportsList from "./screens/ReportsList";
 import ReportForm from "./screens/ReportsForm";
+import ReportDetails from "./screens/ReportDetails";
 import DefectsList from "./screens/DefectsList";
-import ReportItemForm from "./screens/Forms/ReportItemForm";
+import DefectsForm from "./screens/DefectsForm";
 import Camera from "./screens/Camera";
 
 const Stack = createStackNavigator();
@@ -35,9 +36,14 @@ const Screens = () => {
           options={{ title: "All Reports" }}
         />
         <Stack.Screen
-          name="ReportForm"
+          name="ReportsForm"
           component={ReportForm}
           options={{ title: "Add new report" }}
+        />
+        <Stack.Screen
+          name="ReportDetails"
+          component={ReportDetails}
+          options={{ title: "Report Details" }}
         />
         <Stack.Screen
           name="DefectsList"
@@ -45,6 +51,11 @@ const Screens = () => {
           options={{ title: "All defects" }}
         />
         <Stack.Screen
+          name="DefectsForm"
+          component={DefectsForm}
+          options={{ title: "Add new defect" }}
+        />
+        {/* <Stack.Screen
           name="ReportItemForm"
           component={ReportItemForm}
           options={{ title: "Add new report item" }}
@@ -53,7 +64,7 @@ const Screens = () => {
           name="Camera"
           component={Camera}
           options={{ title: "Take Picture of Defect" }}
-        />
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -5,7 +5,8 @@ import { Button } from "react-native-elements";
 import TableElement from "../components/Table";
 
 const ReportItems = ({ route, navigation }) => {
-  const { page, rowData } = route.params;
+  const { id } = route.params;
+  console.log(id);
 
   const tableHeaders = ["ID", "Type", "Notes", "coordinates", "Action"];
   const tableData = [
@@ -16,8 +17,8 @@ const ReportItems = ({ route, navigation }) => {
     <View style={styles.container}>
       <TouchableOpacity>
         <Button
-          onPress={() => navigation.navigate("ReportItemForm", { page })}
-          title="Add New Report item"
+          onPress={() => navigation.navigate("DefectsForm")}
+          title="Add New Defect"
           touchSoundDisabled={false}
         />
       </TouchableOpacity>
@@ -25,7 +26,7 @@ const ReportItems = ({ route, navigation }) => {
         tableHeaders={tableHeaders}
         tableData={tableData}
         navigation={navigation}
-        page={page}
+        // page={page}
       />
     </View>
   );

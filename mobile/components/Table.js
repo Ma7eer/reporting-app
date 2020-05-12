@@ -20,7 +20,7 @@ const TableElement = ({ tableHeaders, tableData, navigation, page }) => (
                       <Button
                         style={styles.btn}
                         onPress={() =>
-                          navigation.navigate("ReportItems", {
+                          navigation.navigate("ReportDetails", {
                             page,
                             rowData: rowData,
                           })

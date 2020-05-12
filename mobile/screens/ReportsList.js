@@ -25,7 +25,7 @@ const ReportsList = ({ navigation }) => {
     <View style={styles.container}>
       <TouchableOpacity>
         <Button
-          onPress={() => navigation.navigate("ReportForm", { form: "report" })}
+          onPress={() => navigation.navigate("ReportsForm", { form: "report" })}
           title="Add New Report"
           touchSoundDisabled={false}
         />
