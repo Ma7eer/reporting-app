@@ -3,44 +3,62 @@ import { StyleSheet, ScrollView, View } from "react-native";
 import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
 import { Button } from "react-native-elements";
 
-const TableElement = ({ tableHeaders, tableData, navigation, page }) => (
-  <ScrollView style={styles.dataWrapper}>
-    <Table borderStyle={{ borderColor: "transparent" }}>
-      <Row data={tableHeaders} style={styles.head} textStyle={styles.text} />
+const TableElement = ({
+  tableHeaders,
+  tableData,
+  navigation,
+  page,
+  nextRoute,
+}) => {
+  // convert array of object to array of arrays
+  let output = tableData.map(function (obj) {
+    return (
+      Object.keys(obj)
+        // .sort()
+        .map(function (key) {
+          return obj[key];
+        })
+    );
+  });
+  return (
+    <ScrollView style={styles.dataWrapper}>
+      <Table borderStyle={{ borderColor: "transparent" }}>
+        <Row data={tableHeaders} style={styles.head} textStyle={styles.text} />
 
-      {tableData.map((rowData, index) => (
-        <TableWrapper key={index} style={styles.row}>
-          {rowData.map((cellData, cellIndex) => {
-            return (
-              <Cell
-                key={cellIndex}
-                data={
-                  cellIndex === rowData.length - 1 ? (
-                    <View style={styles.btnContainer}>
-                      <Button
-                        style={styles.btn}
-                        onPress={() =>
-                          navigation.navigate("ReportDetails", {
-                            page,
-                            rowData: rowData,
-                          })
-                        }
-                        title="View"
-                      />
-                    </View>
-                  ) : (
-                    cellData
-                  )
-                }
-                textStyle={styles.text}
-              />
-            );
-          })}
-        </TableWrapper>
-      ))}
-    </Table>
-  </ScrollView>
-);
+        {output.map((rowData, index) => (
+          <TableWrapper key={index} style={styles.row}>
+            {rowData.map((cellData, cellIndex) => {
+              return (
+                <Cell
+                  key={cellIndex}
+                  data={
+                    cellIndex === rowData.length - 1 ? (
+                      <View style={styles.btnContainer}>
+                        <Button
+                          style={styles.btn}
+                          onPress={() =>
+                            navigation.navigate(nextRoute, {
+                              page,
+                              rowData: rowData,
+                            })
+                          }
+                          title="View"
+                        />
+                      </View>
+                    ) : (
+                      cellData
+                    )
+                  }
+                  textStyle={styles.text}
+                />
+              );
+            })}
+          </TableWrapper>
+        ))}
+      </Table>
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

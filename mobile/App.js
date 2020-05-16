@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import PermissionContext from "./context/PermissionContext";
 import { ReportProvider } from "./context/ReportContext";
+import { DefectProvider } from "./context/DefectContext";
 import { ImageProvider } from "./context/ImageContext";
 
 import { askForMultiPermissions } from "./context/PermissionContext";
@@ -12,7 +13,6 @@ import { askForMultiPermissions } from "./context/PermissionContext";
 import Home from "./screens/Home";
 import ReportsList from "./screens/ReportsList";
 import ReportForm from "./screens/ReportsForm";
-import ReportDetails from "./screens/ReportDetails";
 import DefectsList from "./screens/DefectsList";
 import DefectsForm from "./screens/DefectsForm";
 import Camera from "./screens/Camera";
@@ -30,6 +30,7 @@ const Screens = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
+        {/* Report routes */}
         <Stack.Screen
           name="ReportsList"
           component={ReportsList}
@@ -40,11 +41,7 @@ const Screens = () => {
           component={ReportForm}
           options={{ title: "Add new report" }}
         />
-        <Stack.Screen
-          name="ReportDetails"
-          component={ReportDetails}
-          options={{ title: "Report Details" }}
-        />
+        {/* Defect routes */}
         <Stack.Screen
           name="DefectsList"
           component={DefectsList}
@@ -55,16 +52,11 @@ const Screens = () => {
           component={DefectsForm}
           options={{ title: "Add new defect" }}
         />
-        {/* <Stack.Screen
-          name="ReportItemForm"
-          component={ReportItemForm}
-          options={{ title: "Add new report item" }}
-        />
         <Stack.Screen
           name="Camera"
           component={Camera}
-          options={{ title: "Take Picture of Defect" }}
-        /> */}
+          options={{ title: "Camera" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -74,9 +66,11 @@ export default function App() {
   return (
     <PermissionContext.Provider value={askForMultiPermissions}>
       <ReportProvider>
-        <ImageProvider>
-          <Screens />
-        </ImageProvider>
+        <DefectProvider>
+          <ImageProvider>
+            <Screens />
+          </ImageProvider>
+        </DefectProvider>
       </ReportProvider>
     </PermissionContext.Provider>
   );

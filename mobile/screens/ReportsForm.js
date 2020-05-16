@@ -1,24 +1,19 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, View } from "react-native";
+import { Formik } from "formik";
+import { Button, Input } from "react-native-elements";
 
 import ReportContext from "../context/ReportContext";
-
-import Form from "../components/Form";
 
 import { generateIndex, generateDate } from "../util/util";
 
 const formSchema = {
-  initialValues: {
-    reportName: "",
-    reportId: generateIndex(),
-    reportDate: generateDate(),
-  },
   methods: {
-    addNewReport: (prevState, values) => {
+    addNewReport: (prevState, { reportId, reportName, reportDate }) => {
       return [
         ...prevState,
-        [values.reportId, values.reportName, values.reportDate, "Action"],
+        { reportId, reportName, reportDate, Action: "Action" },
       ];
     },
   },
@@ -26,20 +21,91 @@ const formSchema = {
 
 const ReportsForm = ({ route, navigation }) => {
   /* #region: routing parameter */
-  const { form } = route.params;
+  const { rowData } = route.params;
 
   /* #region: react context */
   const { setReportList } = React.useContext(ReportContext);
 
   return (
     <View style={styles.container}>
-      <Form
-        form={form}
-        initialValues={formSchema.initialValues}
-        setReportList={setReportList}
-        methods={formSchema.methods}
-        navigation={navigation}
-      />
+      <Formik
+        initialValues={
+          rowData
+            ? {
+                reportName: rowData[1],
+                reportId: rowData[0],
+                reportDate: rowData[1],
+              }
+            : {
+                reportName: "",
+                reportId: generateIndex(),
+                reportDate: generateDate(),
+              }
+        }
+        onSubmit={async (values) => {
+          await setReportList((prevState) =>
+            formSchema.methods.addNewReport(prevState, values)
+          );
+
+          navigation.navigate("ReportsList");
+        }}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          // resetForm,
+        }) => (
+          <>
+            <Input
+              label="Report Date"
+              disabled={true}
+              onChangeText={handleChange("reportId")}
+              value={values.reportId}
+            />
+            <Input
+              label="Report Name"
+              placeholder="Enter Report name"
+              value={values.reportName}
+              onBlur={handleBlur("reportName")}
+              onChangeText={handleChange("reportName")}
+              disabled={rowData ? true : false}
+            />
+            <Input
+              label="Report Date"
+              disabled={true}
+              value={values.reportDate}
+              onBlur={handleBlur("reportDate")}
+              onChangeText={handleChange("reportDate")}
+            />
+            {rowData ? null : (
+              <Button
+                onPress={handleSubmit}
+                title="Create New Report"
+                touchSoundDisabled={false}
+              />
+            )}
+          </>
+        )}
+      </Formik>
+      {rowData ? (
+        <View>
+          <Button
+            title="See defect list"
+            onPress={() =>
+              navigation.navigate("DefectsList", { id: rowData[0] })
+            }
+          />
+          <Button
+            title="Publish Report"
+            onPress={() => console.log("Report is published!")}
+            buttonStyle={{ backgroundColor: "green" }}
+          />
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -56,9 +122,6 @@ const styles = StyleSheet.create({
 ReportsForm.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
-  }).isRequired,
-  route: PropTypes.shape({
-    params: PropTypes.object.isRequired,
   }).isRequired,
 };
 

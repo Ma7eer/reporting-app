@@ -2,22 +2,31 @@ import * as React from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { Button } from "react-native-elements";
 
+import DefectContext from "../context/DefectContext";
+
 import TableElement from "../components/Table";
 
 const ReportItems = ({ route, navigation }) => {
-  const { id } = route.params;
-  console.log(id);
+  // const { id } = route.params;
+
+  /* #region: react context */
+  const { defectList } = React.useContext(DefectContext);
+
+  /* #region: react state */
+  const [tableData, setTableData] = React.useState([]);
+
+  /* #region: react Effect */
+  React.useEffect(() => {
+    setTableData(defectList);
+  }, [defectList]);
 
   const tableHeaders = ["ID", "Type", "Notes", "coordinates", "Action"];
-  const tableData = [
-    ["1", "pothole", "many cracks", "24.0000, 11.0000", "Action"],
-  ];
 
   return (
     <View style={styles.container}>
       <TouchableOpacity>
         <Button
-          onPress={() => navigation.navigate("DefectsForm")}
+          onPress={() => navigation.navigate("DefectsForm", { rowData: null })}
           title="Add New Defect"
           touchSoundDisabled={false}
         />
@@ -26,7 +35,7 @@ const ReportItems = ({ route, navigation }) => {
         tableHeaders={tableHeaders}
         tableData={tableData}
         navigation={navigation}
-        // page={page}
+        nextRoute={"DefectsForm"}
       />
     </View>
   );

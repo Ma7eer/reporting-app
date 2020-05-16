@@ -1,6 +1,7 @@
 import * as React from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 import { Camera } from "expo-camera";
+import * as Location from "expo-location";
 
 import ImageContext from "../context/ImageContext";
 
@@ -40,15 +41,15 @@ const CameraScreen = ({ navigation }) => {
                   let long = location.coords.longitude;
 
                   // my network ip address
-                  let url = "http://192.168.68.101:8000";
+                  // let url = "http://192.168.68.101:8000";
 
-                  let res = await axios({
-                    url: url,
-                    method: "POST",
-                    data: createFormData(photo, { lat, long }),
-                  });
-                  console.log("data: ", createFormData(photo, { lat, long }));
-                  navigation.navigate("ReportDetails");
+                  // let res = await axios({
+                  //   url: url,
+                  //   method: "POST",
+                  //   data: createFormData(photo, { lat, long }),
+                  // });
+                  // console.log("data: ", createFormData(photo, { lat, long }));
+                  navigation.navigate("DefectsForm");
                 }
               } catch (e) {
                 console.log(e);

@@ -25,16 +25,16 @@ const ReportsList = ({ navigation }) => {
     <View style={styles.container}>
       <TouchableOpacity>
         <Button
-          onPress={() => navigation.navigate("ReportsForm", { form: "report" })}
+          onPress={() => navigation.navigate("ReportsForm", { rowData: null })}
           title="Add New Report"
           touchSoundDisabled={false}
         />
       </TouchableOpacity>
-
       <TableElement
         tableHeaders={tableHeaders}
         tableData={tableData}
         navigation={navigation}
+        nextRoute={"ReportsForm"}
       />
     </View>
   );
