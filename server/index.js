@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const app = express();
+const testData = require('./mock-data');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,11 +32,21 @@ app.post("/", upload.array("photo", 3), (req, res) => {
 });
 
 app.get("/reports", (req, res) => {
-  res.send("Get ALL reports");
+  res.json({ data: testData.MOCK_REPORTS });
 });
 
 app.get("/reports/:id", (req, res) => {
-  res.send("Get report with id: "+ req.params.id);
+  const report = testData.MOCK_REPORTS.find((report) => report.id == req.params.id) || {};
+  res.json({ data: report });
+});
+
+app.get("/defects", (req, res) => {
+  res.json({ data: testData.MOCK_DEFECTS });
+});
+
+app.get("/defects/:report_id", (req, res) => {
+  const defects = testData.MOCK_DEFECTS.filter((defect) => defect.reportId == req.params.report_id) || {};
+  res.json({ data: defects });
 });
 
 app.listen(8000, () => console.log("Server running on port 8000..."));
