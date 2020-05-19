@@ -30,4 +30,12 @@ app.post("/", upload.array("photo", 3), (req, res) => {
   res.json({ message: "works" });
 });
 
+app.get("/reports", (req, res) => {
+  res.send("Get ALL reports");
+});
+
+app.get("/reports/:id", (req, res) => {
+  res.send("Get report with id: "+ req.params.id);
+});
+
 app.listen(8000, () => console.log("Server running on port 8000..."));
