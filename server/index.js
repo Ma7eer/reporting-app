@@ -58,13 +58,34 @@ app.get("/reports/:id", (req, res) => {
   }
 });
 
-app.get("/defects", (req, res) => {
-  res.json({ data: testData.MOCK_DEFECTS });
+app.get("/reports/:id/defects", (req, res) => {
+  if (globalDB) {
+    globalDB.collection("defects").find({reportId: parseInt(req.params.id, 10)}).toArray((err, data) => {
+      if (err) {
+        res.err(err);
+      }
+      res.send({data});
+    });
+  }
 });
 
-app.get("/defects/:report_id", (req, res) => {
-  const defects = testData.MOCK_DEFECTS.filter((defect) => defect.reportId == req.params.report_id) || {};
-  res.json({ data: defects });
+app.get("/defects", (req, res) => {
+  if (globalDB) {
+    globalDB.collection("defects").find().toArray((err, data) => {
+      if (err) {
+        res.err(err);
+      }
+      res.send({data});
+    });
+  }
+});
+
+app.get("/defects/:id", (req, res) => {
+  if (globalDB) {
+    globalDB.collection("defects").findOne({id: parseInt(req.params.id, 10)}).then((data) => {
+      res.send({data});
+    }).catch((err) => res.err(err));
+  }
 });
 
 app.listen(8000, () => console.log("Server running on port 8000..."));
