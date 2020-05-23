@@ -3,6 +3,14 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const app = express();
 const testData = require('./mock-data');
+const MongoClient = require('mongodb').MongoClient;
+
+// TODO: Hacky way to pass connection around. Find something better.
+let globalDB;
+MongoClient.connect('mongodb://localhost/reporting_app', (err, client) => {
+  if (err) throw err;
+  globalDB = client.db("reporting_app");
+});
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -32,12 +40,22 @@ app.post("/", upload.array("photo", 3), (req, res) => {
 });
 
 app.get("/reports", (req, res) => {
-  res.json({ data: testData.MOCK_REPORTS });
+  if (globalDB) {
+    globalDB.collection("reports").find().toArray((err, data) => {
+      if (err) {
+        res.err(err);
+      }
+      res.send({data});
+    });
+  }
 });
 
 app.get("/reports/:id", (req, res) => {
-  const report = testData.MOCK_REPORTS.find((report) => report.id == req.params.id) || {};
-  res.json({ data: report });
+  if (globalDB) {
+    globalDB.collection("reports").findOne({id: Number(req.params.id)}).then((data) => {
+      res.send({data});
+    }).catch((err) => res.err(err));
+  }
 });
 
 app.get("/defects", (req, res) => {
