@@ -52,7 +52,7 @@ app.get("/reports", (req, res) => {
 
 app.get("/reports/:id", (req, res) => {
   if (globalDB) {
-    globalDB.collection("reports").findOne({id: Number(req.params.id)}).then((data) => {
+    globalDB.collection("reports").findOne({id: parseInt(req.params.id, 10)}).then((data) => {
       res.send({data});
     }).catch((err) => res.err(err));
   }
