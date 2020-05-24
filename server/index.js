@@ -2,90 +2,152 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const app = express();
-const testData = require('./mock-data');
-const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
+const reportSchema = require('./schemas/report').reportSchema;
+const defectSchema = require('./schemas/defect').defectSchema;
 
-// TODO: Hacky way to pass connection around. Find something better.
-let globalDB;
-MongoClient.connect('mongodb://localhost/reporting_app', (err, client) => {
-  if (err) throw err;
-  globalDB = client.db("reporting_app");
-});
+//Set up default mongoose connection
+const mongoDB = 'mongodb://localhost/reporting_app';
+mongoose.connect(mongoDB, { useNewUrlParser: true });
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+//Get the default connection
+const db = mongoose.connection;
 
-// parse application/json
-app.use(bodyParser.json());
+//Bind connection to error event (to get notification of connection errors)
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', function() {
+  // we're connected!
+  console.log('connected to db');
 
-const Storage = multer.diskStorage({
-  destination(req, file, callback) {
-    callback(null, "./images");
-  },
-  filename(req, file, callback) {
-    callback(null, `${file.fieldname}_${Date.now()}.jpeg`);
-  },
-});
+  // setup models
+  const Report = mongoose.model('report', reportSchema);
+  const Defect = mongoose.model('defect', defectSchema);
 
-const upload = multer({ storage: Storage });
+  app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+  // parse application/json
+  app.use(bodyParser.json());
 
-app.post("/", upload.array("photo", 3), (req, res) => {
-  console.log("file", req.files);
-  console.log("body", req.body);
-  res.json({ message: "works" });
-});
+  const Storage = multer.diskStorage({
+    destination(req, file, callback) {
+      callback(null, "./images");
+    },
+    filename(req, file, callback) {
+      callback(null, `${file.fieldname}_${Date.now()}.jpeg`);
+    },
+  });
 
-app.get("/reports", (req, res) => {
-  if (globalDB) {
-    globalDB.collection("reports").find().toArray((err, data) => {
-      if (err) {
-        res.err(err);
-      }
-      res.send({data});
+  const upload = multer({ storage: Storage });
+
+  app.get("/", (req, res) => {
+    res.send("Hello World");
+  });
+
+  app.post("/", upload.array("photo", 3), (req, res) => {
+    console.log("file", req.files);
+    console.log("body", req.body);
+    res.json({ message: "works" });
+  });
+
+  app.get("/reports", (req, res) => {
+    Report.find((err, reports) => {
+      if (err) return console.error(err);
+      console.log(reports);
+      res.status(200).send({data: reports});
     });
-  }
-});
+  });
 
-app.get("/reports/:id", (req, res) => {
-  if (globalDB) {
-    globalDB.collection("reports").findOne({id: parseInt(req.params.id, 10)}).then((data) => {
-      res.send({data});
-    }).catch((err) => res.err(err));
-  }
-});
-
-app.get("/reports/:id/defects", (req, res) => {
-  if (globalDB) {
-    globalDB.collection("defects").find({reportId: parseInt(req.params.id, 10)}).toArray((err, data) => {
-      if (err) {
-        res.err(err);
-      }
-      res.send({data});
+  app.get("/reports/:id", (req, res) => {
+    Report.findOne({_id: req.params.id}, (err, report) => {
+      if (err) return console.error(err);
+      console.log(report);
+      res.status(200).send({data: [report]});
     });
-  }
-});
+  });
 
-app.get("/defects", (req, res) => {
-  if (globalDB) {
-    globalDB.collection("defects").find().toArray((err, data) => {
-      if (err) {
-        res.err(err);
-      }
-      res.send({data});
+  app.get("/reports/:id/defects", (req, res) => {
+    Defect.find({ reportId: req.params.id}, (err, defects) => {
+      if (err) return console.error(err);
+      console.log(defects);
+      res.status(200).send({data: defects});
     });
-  }
-});
+  });
 
-app.get("/defects/:id", (req, res) => {
-  if (globalDB) {
-    globalDB.collection("defects").findOne({id: parseInt(req.params.id, 10)}).then((data) => {
-      res.send({data});
-    }).catch((err) => res.err(err));
-  }
-});
+  app.post("/reports", (req, res) => {
+      const {reportName, reportDate, preparedBy} = req.body;
+      const report = new Report({
+        reportName: reportName,
+        reportDate: reportDate,
+        preparedBy: preparedBy
+      });
 
-app.listen(8000, () => console.log("Server running on port 8000..."));
+      report.save((err, value) => {
+        if (err) {
+          console.err('Error creating report ', err);
+          res.status(500).err('Error creating report ', err);
+        }
+        console.log(value);
+        res.status(200).send(value);
+      });
+  });
+
+  app.get("/defects", (req, res) => {
+    Defect.find((err, defects) => {
+      if (err) return console.error(err);
+      console.log(defects);
+      res.status(200).send({data: defects});
+    });
+  });
+
+  app.get("/defects/:id", (req, res) => {
+    Defect.findOne({_id: req.params.id}, (err, report) => {
+      if (err) return console.error(err);
+      console.log(report);
+      res.status(200).send({data: [report]});
+    });
+  });
+
+  app.post("/defects", (req, res) => {
+    const {
+      reportId,
+      latitude,
+      longitude,
+      chainage,
+      defectType,
+      imageUrl,
+      length,
+      lengthUnit,
+      width,
+      widthUnit,
+      height,
+      heightUnit,
+      notes
+    } = req.body;
+    const defect = new Defect({
+      reportId,
+      latitude,
+      longitude,
+      chainage,
+      defectType,
+      imageUrl,
+      length,
+      lengthUnit,
+      width,
+      widthUnit,
+      height,
+      heightUnit,
+      notes
+    });
+
+    defect.save((err, value) => {
+      if (err) {
+        console.err('Error creating defect ', err);
+        res.status(500).err('Error creating defect ', err);
+      }
+      console.log(value);
+      res.status(200).send(value);
+    });
+  });
+
+  app.listen(8000, () => console.log("Server running on port 8000..."));
+});
