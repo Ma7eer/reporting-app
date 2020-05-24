@@ -76,9 +76,9 @@ db.once('open', function() {
   app.post("/reports", (req, res) => {
       const {reportName, reportDate, preparedBy} = req.body;
       const report = new Report({
-        reportName: reportName,
-        reportDate: reportDate,
-        preparedBy: preparedBy
+        reportName,
+        reportDate,
+        preparedBy
       });
 
       report.save((err, value) => {
@@ -89,6 +89,28 @@ db.once('open', function() {
         console.log(value);
         res.status(200).send(value);
       });
+  });
+
+  app.delete("/reports/:id", (req, res) => {
+    Report.findByIdAndDelete(req.params.id, (err, succ) => {
+      if (err) {
+        console.err('Error deleting report');
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(succ);
+      }
+    });
+  });
+
+  app.patch("/reports/:id", (req, res) => {
+    Report.findOneAndUpdate({_id: req.params.id}, {...req.body}, (err, succ) => {
+      if (err) {
+        console.err('Error updating report');
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(succ);
+      }
+    });
   });
 
   app.get("/defects", (req, res) => {
@@ -146,6 +168,28 @@ db.once('open', function() {
       }
       console.log(value);
       res.status(200).send(value);
+    });
+  });
+
+  app.delete("/defects/:id", (req, res) => {
+    Defect.findByIdAndDelete(req.params.id, (err, succ) => {
+      if (err) {
+        console.err('Error deleting defect');
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(succ);
+      }
+    });
+  });
+
+  app.patch("/defects/:id", (req, res) => {
+    Defect.findOneAndUpdate({_id: req.params.id}, {...req.body}, (err, succ) => {
+      if (err) {
+        console.err('Error updating defect');
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(succ);
+      }
     });
   });
 
