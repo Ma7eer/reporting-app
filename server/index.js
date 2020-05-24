@@ -2,12 +2,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const app = express();
+const cors = require('cors');
 const mongoose = require('mongoose');
 const reportSchema = require('./schemas/report').reportSchema;
 const defectSchema = require('./schemas/defect').defectSchema;
 
 //Set up default mongoose connection
-const mongoDB = `mongodb+srv://admin:${process.env.DB_PASSWORD}@cluster0-vg4tj.mongodb.net/test?retryWrites=true&w=majority`;
+const mongoDB = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0-vg4tj.mongodb.net/test?retryWrites=true&w=majority`;
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 
 //Get the default connection
@@ -23,6 +24,7 @@ db.once('open', function() {
   const Report = mongoose.model('report', reportSchema);
   const Defect = mongoose.model('defect', defectSchema);
 
+  app.use(cors());
   app.use(bodyParser.urlencoded({ extended: true }));
 
   // parse application/json
