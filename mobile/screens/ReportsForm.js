@@ -35,11 +35,13 @@ const ReportsForm = ({ route, navigation }) => {
                 reportName: rowData[1],
                 reportId: rowData[0],
                 reportDate: rowData[1],
+                preparedBy: "Maher",
               }
             : {
                 reportName: "",
                 reportId: generateIndex(),
                 reportDate: generateDate(),
+                preparedBy: "Maher",
               }
         }
         onSubmit={async (values) => {
@@ -67,7 +69,7 @@ const ReportsForm = ({ route, navigation }) => {
               value={values.reportId}
             />
             <Input
-              label="Report Name"
+              label="Enter Report Name"
               placeholder="Enter Report name"
               value={values.reportName}
               onBlur={handleBlur("reportName")}
@@ -80,6 +82,13 @@ const ReportsForm = ({ route, navigation }) => {
               value={values.reportDate}
               onBlur={handleBlur("reportDate")}
               onChangeText={handleChange("reportDate")}
+            />
+            <Input
+              label="Prepared By"
+              disabled={true}
+              value={values.preparedBy}
+              onBlur={handleBlur("preparedBy")}
+              onChangeText={handleChange("preparedBy")}
             />
             {rowData ? null : (
               <Button
@@ -98,11 +107,13 @@ const ReportsForm = ({ route, navigation }) => {
             onPress={() =>
               navigation.navigate("DefectsList", { id: rowData[0] })
             }
+            style={styles.btn}
           />
           <Button
             title="Publish Report"
             onPress={() => console.log("Report is published!")}
             buttonStyle={{ backgroundColor: "green" }}
+            style={styles.btn}
           />
         </View>
       ) : null}
@@ -116,6 +127,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     marginTop: 20,
+  },
+  btn: {
+    margin: 10,
   },
 });
 

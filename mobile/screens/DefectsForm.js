@@ -6,8 +6,9 @@ import {
   SafeAreaView,
   Picker,
 } from "react-native";
-import { Button, Input, Image } from "react-native-elements";
+import { Button, Input, Image, Text } from "react-native-elements";
 import { Formik } from "formik";
+import DropDownPicker from "react-native-dropdown-picker";
 
 import DefectContext from "../context/DefectContext";
 import ImageContext from "../context/ImageContext";
@@ -68,7 +69,7 @@ const ReportItemForm = ({ route, navigation }) => {
     <SafeAreaView
       // contentContainerStyle
       style={{
-        // flex: 1,
+        flex: 1,
         // justifyContent: "flex-start",
         // alignItems: "center",
         margin: 20,
@@ -94,8 +95,11 @@ const ReportItemForm = ({ route, navigation }) => {
                   lat: "",
                   long: "",
                   width: "",
+                  widthUnit: "m",
                   length: "",
+                  lengthUnit: "m",
                   thickness: "",
+                  thicknessUnit: "m",
                   notes: "",
                 }
           }
@@ -114,6 +118,7 @@ const ReportItemForm = ({ route, navigation }) => {
             handleChange,
             handleBlur,
             handleSubmit,
+            setFieldValue,
             // resetForm,
           }) => (
             <>
@@ -143,6 +148,7 @@ const ReportItemForm = ({ route, navigation }) => {
                   onPress={() => navigation.navigate("Camera")}
                 />
               )}
+
               <Input
                 label="Defect Type"
                 placeholder="Enter Defect Type"
@@ -150,7 +156,9 @@ const ReportItemForm = ({ route, navigation }) => {
                 onBlur={handleBlur("defectType")}
                 onChangeText={handleChange("defectType")}
                 disabled={rowData ? true : false}
+                containerStyle={{ marginTop: 10 }}
               />
+
               <View style={styles.multiInputRow}>
                 <Input
                   label="Latitude"
@@ -165,6 +173,7 @@ const ReportItemForm = ({ route, navigation }) => {
                   value={values.long}
                 />
               </View>
+
               <View style={styles.multiInputRow}>
                 <Input
                   label="Width"
@@ -174,14 +183,26 @@ const ReportItemForm = ({ route, navigation }) => {
                   onChangeText={handleChange("width")}
                   disabled={rowData ? true : false}
                 />
-                <Picker
-                  selectedValue={"km"}
-                  style={{ height: 50, width: 150 }}
-                  onValueChange={handleChange("widthUnit")}
-                >
-                  <Picker.Item label="km" value="km" />
-                  <Picker.Item label="m" value="m" />
-                </Picker>
+
+                <View>
+                  <Text style={{ fontSize: 18 }}>Unit</Text>
+                  <DropDownPicker
+                    items={[
+                      // { label: "", value: "" },
+                      { label: "km", value: "km" },
+                      { label: "m", value: "m" },
+                    ]}
+                    defaultIndex={0}
+                    containerStyle={{
+                      height: 40,
+                      width: 200,
+                    }}
+                    onChangeItem={(item) => setFieldValue(item.value)}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.multiInputRow}>
                 <Input
                   label="Length"
                   placeholder="Enter length"
@@ -190,31 +211,51 @@ const ReportItemForm = ({ route, navigation }) => {
                   onChangeText={handleChange("length")}
                   disabled={rowData ? true : false}
                 />
-                <Picker
-                  selectedValue={"km"}
-                  style={{ height: 50, width: 150 }}
-                  onValueChange={handleChange("lengthUnit")}
-                >
-                  <Picker.Item label="km" value="km" />
-                  <Picker.Item label="m" value="m" />
-                </Picker>
+                <View>
+                  <Text style={{ fontSize: 18 }}>Unit</Text>
+                  <DropDownPicker
+                    items={[
+                      // { label: "", value: "" },
+                      { label: "km", value: "km" },
+                      { label: "m", value: "m" },
+                    ]}
+                    defaultIndex={0}
+                    containerStyle={{
+                      height: 40,
+                      width: 200,
+                    }}
+                    onChangeItem={(item) => setFieldValue(item.value)}
+                  />
+                </View>
               </View>
-              <Input
-                label="Thickness"
-                placeholder="Enter thickness"
-                value={values.thickness}
-                onBlur={handleBlur("depth")}
-                onChangeText={handleChange("depth")}
-                disabled={rowData ? true : false}
-              />
-              <Picker
-                selectedValue={"km"}
-                style={{ height: 50, width: 150 }}
-                onValueChange={handleChange("depthUnit")}
-              >
-                <Picker.Item label="km" value="km" />
-                <Picker.Item label="m" value="m" />
-              </Picker>
+
+              <View style={styles.multiInputRow}>
+                <Input
+                  label="Thickness"
+                  placeholder="Enter thickness"
+                  value={values.thickness}
+                  onBlur={handleBlur("depth")}
+                  onChangeText={handleChange("depth")}
+                  disabled={rowData ? true : false}
+                />
+                <View>
+                  <Text style={{ fontSize: 18 }}>Unit</Text>
+                  <DropDownPicker
+                    items={[
+                      // { label: "", value: "" },
+                      { label: "km", value: "km" },
+                      { label: "m", value: "m" },
+                    ]}
+                    defaultIndex={0}
+                    containerStyle={{
+                      height: 40,
+                      width: 200,
+                    }}
+                    onChangeItem={(item) => setFieldValue(item.value)}
+                  />
+                </View>
+              </View>
+
               <Input
                 label="Notes"
                 placeholder="Enter notes"
@@ -241,13 +282,9 @@ const ReportItemForm = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   multiInputRow: {
-    flex: 0,
+    flex: 1,
     flexDirection: "row",
-    width: 200,
-    // justifyContent: "center",
-    // alignItems: "center",
-    // alignSelf: "center",
-    // alignContent: "center",
+    maxWidth: 200,
   },
 });
 

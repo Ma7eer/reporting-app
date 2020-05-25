@@ -5,6 +5,7 @@ import { Button } from "react-native-elements";
 import DefectContext from "../context/DefectContext";
 
 import TableElement from "../components/Table";
+import { set } from "react-native-reanimated";
 
 const ReportItems = ({ route, navigation }) => {
   // const { id } = route.params;
@@ -17,7 +18,18 @@ const ReportItems = ({ route, navigation }) => {
 
   /* #region: react Effect */
   React.useEffect(() => {
-    setTableData(defectList);
+    console.log(defectList[0]);
+    let arr = [];
+    defectList.map((defect) => {
+      arr.push([
+        defect.defectId,
+        defect.defectType,
+        defect.Notes,
+        `${defect.lat},${defect.long}`,
+        "Action",
+      ]);
+    });
+    setTableData(arr);
   }, [defectList]);
 
   const tableHeaders = ["ID", "Type", "Notes", "coordinates", "Action"];
