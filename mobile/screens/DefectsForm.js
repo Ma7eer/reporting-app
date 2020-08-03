@@ -189,7 +189,7 @@ const ReportItemForm = ({ route, navigation }) => {
                   <DropDownPicker
                     items={[
                       // { label: "", value: "" },
-                      { label: "km", value: "km" },
+                      { label: "km", value: values.widthUnit },
                       { label: "m", value: "m" },
                     ]}
                     defaultIndex={0}
@@ -216,7 +216,7 @@ const ReportItemForm = ({ route, navigation }) => {
                   <DropDownPicker
                     items={[
                       // { label: "", value: "" },
-                      { label: "km", value: "km" },
+                      { label: "km", value: values.lengthUnit },
                       { label: "m", value: "m" },
                     ]}
                     defaultIndex={0}
@@ -243,7 +243,7 @@ const ReportItemForm = ({ route, navigation }) => {
                   <DropDownPicker
                     items={[
                       // { label: "", value: "" },
-                      { label: "km", value: "km" },
+                      { label: "km", value: values.thicknessUnit },
                       { label: "m", value: "m" },
                     ]}
                     defaultIndex={0}

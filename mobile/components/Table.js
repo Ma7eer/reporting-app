@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, ScrollView, View } from "react-native";
+import { StyleSheet, ScrollView, View, Text } from "react-native";
 import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
 import { Button } from "react-native-elements";
 
@@ -12,9 +12,12 @@ const TableElement = ({
 }) => {
   // convert array of object to array of arrays
   let output = tableData.map(function (obj) {
+    // add an empty item to end of array so it can be the value rendered under the Action header
+    obj[""] = "";
     return (
       Object.keys(obj)
         // .sort()
+        .filter((key) => key !== "_id")
         .map(function (key) {
           return obj[key];
         })
@@ -32,6 +35,8 @@ const TableElement = ({
                 <Cell
                   key={cellIndex}
                   data={
+                    // last item in array will be matched with Action Header
+                    // which will render a button that navigates to another page
                     cellIndex === rowData.length - 1 ? (
                       <View style={styles.btnContainer}>
                         <Button

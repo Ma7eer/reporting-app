@@ -2,6 +2,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { Button } from "react-native-elements";
+import axios from "axios";
 
 import ReportContext from "../context/ReportContext";
 
@@ -9,7 +10,7 @@ import TableElement from "../components/Table";
 
 const ReportsList = ({ navigation }) => {
   /* #region: react context */
-  const { reportList } = React.useContext(ReportContext);
+  const { reportList, setReportList } = React.useContext(ReportContext);
 
   /* #region: react state */
   const [tableData, setTableData] = React.useState([]);
@@ -17,7 +18,15 @@ const ReportsList = ({ navigation }) => {
   /* #region: react Effect */
   React.useEffect(() => {
     setTableData(reportList);
-  }, [reportList]);
+    axios({
+      url: "http://192.168.68.101:3000/reports",
+      method: "GET",
+    }).then((res) => {
+      // console.log(res.data.data);
+      setReportList([...res.data.data]);
+      setTableData([...res.data.data]);
+    });
+  }, []);
 
   const tableHeaders = ["ID", "Name", "Date", "Action"];
 

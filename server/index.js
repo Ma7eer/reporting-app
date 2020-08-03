@@ -2,27 +2,26 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const app = express();
-const cors = require('cors');
-const mongoose = require('mongoose');
-const reportSchema = require('./schemas/report').reportSchema;
-const defectSchema = require('./schemas/defect').defectSchema;
-
-//Set up default mongoose connection
-const mongoDB = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0-vg4tj.mongodb.net/test?retryWrites=true&w=majority`;
-mongoose.connect(mongoDB, { useNewUrlParser: true });
-
-//Get the default connection
-const db = mongoose.connection;
+const cors = require("cors");
+const mongoose = require("mongoose");
+const reportSchema = require("./schemas/report").reportSchema;
+const defectSchema = require("./schemas/defect").defectSchema;
+const db = require("./db.config");
+// //Set up default mongoose connection
+// const mongoDB = `mongodb://root:abcdefg123@ds155299.mlab.com:55299/report`;
+// mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+// //Get the default connection
+// const db = mongoose.connection;
 
 //Bind connection to error event (to get notification of connection errors)
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', function() {
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
+db.once("open", function () {
   // we're connected!
-  console.log('connected to db');
+  console.log("connected to db");
 
   // setup models
-  const Report = mongoose.model('report', reportSchema);
-  const Defect = mongoose.model('defect', defectSchema);
+  const Report = mongoose.model("report", reportSchema);
+  const Defect = mongoose.model("defect", defectSchema);
 
   app.use(cors());
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,7 +41,7 @@ db.once('open', function() {
   const upload = multer({ storage: Storage });
 
   app.get("/", (req, res) => {
-    res.send("Hello World");
+    // res.send("Hello World");
   });
 
   app.post("/", upload.array("photo", 3), (req, res) => {
@@ -52,51 +51,51 @@ db.once('open', function() {
   });
 
   app.get("/reports", (req, res) => {
-    Report.find((err, reports) => {
+    Report.find({}, "reportId reportName reportDate", (err, reports) => {
       if (err) return console.error(err);
       console.log(reports);
-      res.status(200).send({data: reports});
+      res.status(200).send({ data: reports });
     });
   });
 
   app.get("/reports/:id", (req, res) => {
-    Report.findOne({_id: req.params.id}, (err, report) => {
+    Report.findOne({ _id: req.params.id }, (err, report) => {
       if (err) return console.error(err);
       console.log(report);
-      res.status(200).send({data: [report]});
+      res.status(200).send({ data: [report] });
     });
   });
 
   app.get("/reports/:id/defects", (req, res) => {
-    Defect.find({ reportId: req.params.id}, (err, defects) => {
+    Defect.find({ reportId: req.params.id }, (err, defects) => {
       if (err) return console.error(err);
       console.log(defects);
-      res.status(200).send({data: defects});
+      res.status(200).send({ data: defects });
     });
   });
 
   app.post("/reports", (req, res) => {
-      const {reportName, reportDate, preparedBy} = req.body;
-      const report = new Report({
-        reportName,
-        reportDate,
-        preparedBy
-      });
+    const { reportName, reportDate, preparedBy } = req.body;
+    const report = new Report({
+      reportName,
+      reportDate,
+      preparedBy,
+    });
 
-      report.save((err, value) => {
-        if (err) {
-          console.err('Error creating report ', err);
-          res.status(500).err('Error creating report ', err);
-        }
-        console.log(value);
-        res.status(200).send(value);
-      });
+    report.save((err, value) => {
+      if (err) {
+        console.err("Error creating report ", err);
+        res.status(500).err("Error creating report ", err);
+      }
+      console.log(value);
+      res.status(200).send(value);
+    });
   });
 
   app.delete("/reports/:id", (req, res) => {
     Report.findByIdAndDelete(req.params.id, (err, succ) => {
       if (err) {
-        console.err('Error deleting report');
+        console.err("Error deleting report");
         res.status(500).send(err);
       } else {
         res.status(200).send(succ);
@@ -105,29 +104,33 @@ db.once('open', function() {
   });
 
   app.patch("/reports/:id", (req, res) => {
-    Report.findOneAndUpdate({_id: req.params.id}, {...req.body}, (err, succ) => {
-      if (err) {
-        console.err('Error updating report');
-        res.status(500).send(err);
-      } else {
-        res.status(200).send(succ);
+    Report.findOneAndUpdate(
+      { _id: req.params.id },
+      { ...req.body },
+      (err, succ) => {
+        if (err) {
+          console.err("Error updating report");
+          res.status(500).send(err);
+        } else {
+          res.status(200).send(succ);
+        }
       }
-    });
+    );
   });
 
   app.get("/defects", (req, res) => {
     Defect.find((err, defects) => {
       if (err) return console.error(err);
       console.log(defects);
-      res.status(200).send({data: defects});
+      res.status(200).send({ data: defects });
     });
   });
 
   app.get("/defects/:id", (req, res) => {
-    Defect.findOne({_id: req.params.id}, (err, report) => {
+    Defect.findOne({ _id: req.params.id }, (err, report) => {
       if (err) return console.error(err);
       console.log(report);
-      res.status(200).send({data: [report]});
+      res.status(200).send({ data: [report] });
     });
   });
 
@@ -145,7 +148,7 @@ db.once('open', function() {
       widthUnit,
       height,
       heightUnit,
-      notes
+      notes,
     } = req.body;
     const defect = new Defect({
       reportId,
@@ -160,13 +163,13 @@ db.once('open', function() {
       widthUnit,
       height,
       heightUnit,
-      notes
+      notes,
     });
 
     defect.save((err, value) => {
       if (err) {
-        console.err('Error creating defect ', err);
-        res.status(500).err('Error creating defect ', err);
+        console.err("Error creating defect ", err);
+        res.status(500).err("Error creating defect ", err);
       }
       console.log(value);
       res.status(200).send(value);
@@ -176,7 +179,7 @@ db.once('open', function() {
   app.delete("/defects/:id", (req, res) => {
     Defect.findByIdAndDelete(req.params.id, (err, succ) => {
       if (err) {
-        console.err('Error deleting defect');
+        console.err("Error deleting defect");
         res.status(500).send(err);
       } else {
         res.status(200).send(succ);
@@ -185,15 +188,19 @@ db.once('open', function() {
   });
 
   app.patch("/defects/:id", (req, res) => {
-    Defect.findOneAndUpdate({_id: req.params.id}, {...req.body}, (err, succ) => {
-      if (err) {
-        console.err('Error updating defect');
-        res.status(500).send(err);
-      } else {
-        res.status(200).send(succ);
+    Defect.findOneAndUpdate(
+      { _id: req.params.id },
+      { ...req.body },
+      (err, succ) => {
+        if (err) {
+          console.err("Error updating defect");
+          res.status(500).send(err);
+        } else {
+          res.status(200).send(succ);
+        }
       }
-    });
+    );
   });
 
-  app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}...`));
+  app.listen(3000, () => console.log(`Server running on port 3000...`));
 });
