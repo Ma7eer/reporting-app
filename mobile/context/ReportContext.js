@@ -25,18 +25,18 @@ let date = new Date();
 //   ],
 // ];
 
-let list2 = [
-  {
-    reportId: "R2019-001",
-    reportName: "Fahud to Mattan",
-    reportDate: `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`,
-    Action: "Action",
-  },
-];
+// let list2 = [
+//   {
+//     reportId: "R2019-001",
+//     reportName: "Fahud to Mattan",
+//     reportDate: `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`,
+//     Action: "Action",
+//   },
+// ];
 
 export const ReportProvider = ({ children }) => {
   /* This allows us to change context from our tag component */
-  const [reportList, setReportList] = React.useState(list2);
+  const [reportList, setReportList] = React.useState([]);
 
   return (
     <ReportContext.Provider

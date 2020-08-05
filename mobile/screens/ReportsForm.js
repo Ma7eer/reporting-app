@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { StyleSheet, View } from "react-native";
 import { Formik } from "formik";
 import { Button, Input } from "react-native-elements";
+import { useMutation, queryCache } from "react-query";
+import axios from "axios";
 
 import ReportContext from "../context/ReportContext";
 
@@ -19,6 +21,10 @@ const formSchema = {
   },
 };
 
+const postReport = (values) => {
+  axios.post("http://192.168.68.117:3000/reports", values);
+};
+
 const ReportsForm = ({ route, navigation }) => {
   /* #region: routing parameter */
   const { rowData } = route.params;
@@ -26,25 +32,35 @@ const ReportsForm = ({ route, navigation }) => {
   /* #region: react context */
   const { setReportList } = React.useContext(ReportContext);
 
+  // Mutations
+  const [addReport] = useMutation(postReport, {
+    onSuccess: async () => {
+      // Query Invalidations
+      await queryCache.invalidateQueries("reports");
+    },
+  });
+
   return (
     <View style={styles.container}>
       <Formik
         initialValues={
           rowData
             ? {
-                reportName: rowData[1],
-                reportId: rowData[0],
-                reportDate: rowData[1],
-                preparedBy: "Maher",
+                reportName: rowData["reportName"],
+                reportId: rowData["reportId"],
+                reportDate: rowData["reportDate"],
+                preparedBy: rowData["preparedBy"],
               }
             : {
                 reportName: "",
                 reportId: generateIndex(),
                 reportDate: generateDate(),
-                preparedBy: "Maher",
+                preparedBy: "", // whoever is signed in
               }
         }
         onSubmit={async (values) => {
+          await addReport(values);
+
           await setReportList((prevState) =>
             formSchema.methods.addNewReport(prevState, values)
           );
@@ -63,7 +79,7 @@ const ReportsForm = ({ route, navigation }) => {
         }) => (
           <>
             <Input
-              label="Report Date"
+              label="Report ID"
               disabled={true}
               onChangeText={handleChange("reportId")}
               value={values.reportId}

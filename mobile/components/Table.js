@@ -11,55 +11,63 @@ const TableElement = ({
   nextRoute,
 }) => {
   // convert array of object to array of arrays
-  let output = tableData.map(function (obj) {
-    // add an empty item to end of array so it can be the value rendered under the Action header
-    obj[""] = "";
-    return (
-      Object.keys(obj)
-        // .sort()
-        .filter((key) => key !== "_id")
-        .map(function (key) {
-          return obj[key];
-        })
-    );
-  });
+  let output = tableData
+    ? tableData.map(function (obj) {
+        // add an empty item to end of array so it can be the value rendered under the Action header
+        obj[""] = "";
+        return (
+          Object.keys(obj)
+            // .sort()
+            .filter((key) => key !== "_id")
+            .filter((key) => key !== "preparedBy")
+            .map(function (key) {
+              return obj[key];
+            })
+        );
+      })
+    : [];
+
   return (
     <ScrollView style={styles.dataWrapper}>
       <Table borderStyle={{ borderColor: "transparent" }}>
         <Row data={tableHeaders} style={styles.head} textStyle={styles.text} />
 
-        {output.map((rowData, index) => (
-          <TableWrapper key={index} style={styles.row}>
-            {rowData.map((cellData, cellIndex) => {
-              return (
-                <Cell
-                  key={cellIndex}
-                  data={
-                    // last item in array will be matched with Action Header
-                    // which will render a button that navigates to another page
-                    cellIndex === rowData.length - 1 ? (
-                      <View style={styles.btnContainer}>
-                        <Button
-                          style={styles.btn}
-                          onPress={() =>
-                            navigation.navigate(nextRoute, {
-                              page,
-                              rowData: rowData,
-                            })
-                          }
-                          title="View"
-                        />
-                      </View>
-                    ) : (
-                      cellData
-                    )
-                  }
-                  textStyle={styles.text}
-                />
-              );
-            })}
-          </TableWrapper>
-        ))}
+        {output.map((rowData, index) => {
+          return (
+            <TableWrapper key={index} style={styles.row}>
+              {rowData.map((cellData, cellIndex) => {
+                return (
+                  <Cell
+                    key={cellIndex}
+                    data={
+                      // last item in array will be matched with Action Header
+                      // which will render a button that navigates to another page
+                      cellIndex === rowData.length - 1 ? (
+                        <View style={styles.btnContainer}>
+                          <Button
+                            style={styles.btn}
+                            onPress={() =>
+                              navigation.navigate(nextRoute, {
+                                page,
+                                rowData: tableData[index],
+                                /* we are sending `tableData` instead of `rowData` because `tableData` 
+                                has the full data `rowData` is filtered when created output */
+                              })
+                            }
+                            title="View"
+                          />
+                        </View>
+                      ) : (
+                        cellData
+                      )
+                    }
+                    textStyle={styles.text}
+                  />
+                );
+              })}
+            </TableWrapper>
+          );
+        })}
       </Table>
     </ScrollView>
   );
