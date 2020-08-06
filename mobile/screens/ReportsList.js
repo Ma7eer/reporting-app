@@ -18,15 +18,11 @@ const ReportsList = ({ navigation }) => {
   /* #region: react context */
   const { reportList, setReportList } = React.useContext(ReportContext);
 
-  /* #region: react state */
-  const [tableData, setTableData] = React.useState([]);
-
   const { isLoading, isError, data, error } = useQuery("reports", fetchReports);
 
   /* #region: react Effect */
   React.useEffect(() => {
     setReportList(data);
-    setTableData(data);
   }, [reportList]);
 
   const tableHeaders = ["ID", "Name", "Date", "Action"];
@@ -46,7 +42,7 @@ const ReportsList = ({ navigation }) => {
       </TouchableOpacity>
       <TableElement
         tableHeaders={tableHeaders}
-        tableData={tableData}
+        tableData={reportList}
         navigation={navigation}
         nextRoute={"ReportsForm"}
       />

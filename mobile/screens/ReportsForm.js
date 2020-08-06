@@ -35,6 +35,7 @@ const ReportsForm = ({ route, navigation }) => {
   // Mutations
   const [addReport] = useMutation(postReport, {
     onSuccess: async () => {
+      await console.log("rrr");
       // Query Invalidations
       await queryCache.invalidateQueries("reports");
     },
@@ -48,7 +49,13 @@ const ReportsForm = ({ route, navigation }) => {
             ? {
                 reportName: rowData["reportName"],
                 reportId: rowData["reportId"],
-                reportDate: rowData["reportDate"],
+                reportDate: `${new Date(rowData["reportDate"])
+                  .getFullYear()
+                  .toString()}-${new Date(rowData["reportDate"])
+                  .getMonth()
+                  .toString()}-${new Date(rowData["reportDate"])
+                  .getDate()
+                  .toString()}`,
                 preparedBy: rowData["preparedBy"],
               }
             : {
